@@ -22,8 +22,18 @@ public class Login extends HttpServlet {
             Gson gson = new Gson();
             JsonReader jsonReader = new JsonReader(reader);
             LoginInformation loginInformation = gson.fromJson(jsonReader, LoginInformation.class);
+            LoginDAO dao = new LoginDAO() {
+                @Override
+                public boolean checkValidity(LoginInformation login) {
+                    return "Thorsten".equals(login.username) && "Gruppenkacken_mit_Thomas12345".equals(login.password);
+                }
+            };
+
+            if(dao.checkValidity(loginInformation)) {
+                response.setStatus(200);
+            } else {
+                response.setStatus(401);
+            }
         }
-        response.setContentType("text/html;");
-        response.getWriter().println("<h1>Hello world!</h1>");
     }
 }
